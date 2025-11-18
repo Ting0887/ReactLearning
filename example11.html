@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <title>example11</title>
+
+    <!-- React -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- React Router DOM (UMD) -->
+    <script src="https://cdn.skypack.dev/react-router-dom@6/umd/react-router-dom.production.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function App() {
+            const [form, setForm] = React.useState({
+                name : "", email : "", password : ""
+            });
+            const [err, setErr] = React.useState({});
+
+            const validate = (name, value) => {
+                let errMsg = "";
+                if(name === "name" && value.trim() === ""){
+                    errMsg = "名字不能為空";
+                }
+                if (name === "email") {
+                    if (!value) 
+                        errMsg = "Email 不能為空";
+                    else if (!/\S+@\S+\.\S+/.test(value)) 
+                        errMsg = "Email 格式錯誤";
+                }
+                if (name === "password" && value.length < 6) {
+                    errMsg = "密碼至少 6 個字元";
+                }
+                return errMsg;
+            }
+
+            const handleChange = (e) => {
+                const {name, value} = e.target;
+                setForm({...form, [name] : value});
+                setErr({...err, [name]: validate(name, value)})
+            }
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                const newErr = {};
+                Object.keys(form).forEach( (key) => {
+                    const error = validate(key, form[key]);
+                    if(error) newErr[key] = error;
+                })
+                if(Object.keys(newErr).length > 0){
+                    setErr(newErr);
+                    return;
+                }
+                alert(`送出資料:\n名字: ${form.name}\nEmail: ${form.email}\n密碼: ${form.password}`);
+                // 清空表單
+                setForm({ name: "", email: "", password: "" });
+                setErrors({});
+            }
+            return (<div>
+                    <h2>表單範例</h2>
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <label>名字:</label><br />
+                            <input name="name" value={form.name} onChange={handleChange} />
+                            {err.name && <div style={{color:"red"}}>{err.name}</div>}
+                        </div>
+                        <div>
+                            <label>Email:</label><br />
+                            <input name="email" value={form.email} onChange={handleChange} />
+                            {err.email && <div style={{color:"red"}}>{err.email}</div>}
+                        </div>
+                        <div>
+                            <label>密碼:</label><br />
+                            <input type="password" name="password" value={form.password} onChange={handleChange} />
+                            {err.password && <div style={{color:"red"}}>{err.password}</div>}
+                        </div>
+                        <button type="submit">送出</button>
+                    </form>
+                    <h3>即時表單內容預覽</h3>
+                    <pre>{JSON.stringify(form, null, 2)}</pre>
+                </div>);
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+</html>
