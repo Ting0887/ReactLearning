@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>React Todo List</title>
+
+    <!-- React CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel：讓 JSX 可以在瀏覽器跑 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function UserGreeting(){
+            return <h1>歡迎回到首頁</h1>;
+        }
+        function GuestGreeting(props){
+            return <h1>請先登入</h1>;
+        }
+        function App(props) {
+            const isLogging = props.isLogging;
+            /*
+            if(isLogging)
+                return <UserGreeting></UserGreeting>;
+            else
+                return <GuestGreeting></GuestGreeting>
+            */
+           return isLogging ? <UserGreeting></UserGreeting> : <GuestGreeting></GuestGreeting>;
+        }
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App isLogging={true} />);
+    </script>
+  </body>
+</html>

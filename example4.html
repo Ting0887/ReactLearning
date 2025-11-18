@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>React Learning</title>
+
+    <!-- React CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel：讓 JSX 可以在瀏覽器跑 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function Hello(props){
+            return <h1>你好，我是{props.name},今年{props.age}</h1>;
+        }
+        function App(){
+            const students = [
+                {name: "Ting Yang", age: 18},
+                {name: "React beginner", age: 14},
+                {name: "Alice", age: 20},
+            ];
+            return (
+                <div>
+                    {students.map((s, i) => (
+                        <Hello key={i} name={s.name} age={s.age}></Hello>
+                    ))}
+                </div>
+            );
+        }
+      const root = ReactDOM.createRoot(document.getElementById("root"));
+      root.render(<App />);
+    </script>
+  </body>
+</html>

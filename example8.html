@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>React example</title>
+
+    <!-- React CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel：讓 JSX 可以在瀏覽器跑 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+
+        function UserGreeting({inputName, inputAge}){
+            return (
+                <div>
+                    <h1>welcome, login, {inputName}</h1>
+                    <h2>your age is {inputAge}</h2>
+                </div>
+            );
+        }
+
+        function GuestGreeting({inputName, inputAge, setInputName, setInputAge, handleLoginClick}){
+            return (<div>
+                        <input type="text" placeholder="請輸入名字" value={inputName} 
+                            onChange={e => setInputName(e.target.value)} 
+                            onKeyDown={e => e.key === 'Enter' && handleLoginClick()} /><br />
+                        <input type="text" placeholder="請輸入年齡" value={inputAge} 
+                            onChange={e => setInputAge(e.target.value)} 
+                            onKeyDown={e => e.key === 'Enter' && handleLoginClick()}/>
+                    </div>);
+        }
+
+        function App() {
+            const [name, setName] = React.useState("");
+            const [age, setAge] = React.useState("");
+            const [inputName, setInputName] = React.useState("");
+            const [inputAge, setInputAge] = React.useState("");
+            const [isLoggedIn, setIsLoggedIn] = React.useState(true);
+            const handleLoginClick = () => {
+                if(inputName.trim() === "" || inputAge.trim() === "") return "";
+                setName(inputName);
+                setAge(inputAge);
+                setIsLoggedIn(true);
+            };
+            const handleLogoutClick = () => {
+                setName("");
+                setAge("");
+                setIsLoggedIn(false);
+            };
+
+            return (
+                <div>
+                    {isLoggedIn ? <UserGreeting inputName={inputName} inputAge={inputAge}  /> : <GuestGreeting inputName={inputName} inputAge={inputAge} 
+                                        setInputName={setInputName} setInputAge={setInputAge} handleLoginClick={handleLoginClick} />}
+                    {isLoggedIn ? 
+                        (<button onClick={handleLogoutClick}>登出</button>):
+                        (<button onClick={handleLoginClick}>登入</button>)
+                    }
+                </div>
+            );
+        }
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+  </body>
+</html>

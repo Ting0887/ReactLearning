@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>React Todo List</title>
+
+    <!-- React CDN -->
+    <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel：讓 JSX 可以在瀏覽器跑 -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        function App() {
+            const [text, setText] = React.useState("");
+            const [todos, setTodos] = React.useState([]);
+
+            const [editIndex, setEditIndex] = React.useState(null);
+            const [editText, setEditText] = React.useState("");
+
+            // 新增 Todo
+            const addTodos = () => {
+                if (text.trim() === "") return;
+                setTodos([...todos, text]);
+                setText("");
+            };
+
+            // 刪除 Todo
+            const deleteTodos = (index) => {
+                setTodos(todos.filter((_, i) => i !== index));
+            };
+
+            // 開始編輯
+            const startEdit = (index) => {
+                setEditIndex(index);
+                setEditText(todos[index]);
+            };
+
+            // 保存編輯
+            const saveEdit = (index) => {
+                const newTodos = [...todos];
+                newTodos[index] = editText;
+                setTodos(newTodos);
+                setEditIndex(null);
+                setEditText("");
+            };
+
+            return (
+                <div>
+                    <h1>Todo List</h1>
+
+                    <input
+                        value={text}
+                        onChange={(e) => setText(e.target.value)}
+                        placeholder="輸入代辦事項"
+                    />
+                    <button onClick={addTodos}>新增</button>
+
+                    <ul>
+                        {todos.map((t, i) => (
+                            <li key={i}>
+                                {editIndex === i ? (
+                                    <React.Fragment>
+                                        <input
+                                            value={editText}
+                                            onChange={(e) => setEditText(e.target.value)}
+                                        />
+                                        <button onClick={() => saveEdit(i)}>保存</button>
+                                        <button onClick={() => setEditIndex(null)}>取消</button>
+                                    </React.Fragment>
+                                ) : (
+                                    <React.Fragment>
+                                        {t}
+                                        <button onClick={() => startEdit(i)}>編輯</button>
+                                        <button onClick={() => deleteTodos(i)}>刪除</button>
+                                    </React.Fragment>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            );
+        }
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+  </body>
+</html>

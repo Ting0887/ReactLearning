@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8" />
+    <title>React Router CDN Demo</title>
+
+    <!-- React -->
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+
+    <!-- Babel -->
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <!-- React Router DOM (UMD) -->
+    <script src="https://cdn.skypack.dev/react-router-dom@6/umd/react-router-dom.production.min.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { BrowserRouter, Routes, Route, Link } = ReactRouterDOM;
+
+        function Home() {
+            return <h2>🏠 首頁</h2>;
+        }
+
+        function About() {
+            return <h2>ℹ️ 關於我們</h2>;
+        }
+
+        function Contact() {
+            return <h2>📞 聯絡方式</h2>;
+        }
+
+        function App() {
+            return (
+                <BrowserRouter>
+                    <nav style={{ display: "flex", gap: "10px" }}>
+                        <Link to="/">首頁</Link>
+                        <Link to="/about">關於</Link>
+                        <Link to="/contact">聯絡</Link>
+                    </nav>
+
+                    <hr />
+
+                    <Routes>
+                        <Route path="/" element={<Home />} />
+                        <Route path="/about" element={<About />} />
+                        <Route path="/contact" element={<Contact />} />
+                    </Routes>
+                </BrowserRouter>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById("root"));
+        root.render(<App />);
+    </script>
+</body>
+</html>
